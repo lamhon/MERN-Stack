@@ -1,7 +1,3 @@
-POST http://localhost:5000/user/login
+POST http://localhost:5000/api/category
 Content-Type: application/json
 
-{
-    "email": "duyentm@gmail.com",
-    "password": "Tunglam252000"
-}
