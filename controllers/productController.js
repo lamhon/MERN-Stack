@@ -57,7 +57,11 @@ const ProductController = {
                 .sorting();
             const products = await features.query;
 
-            res.json(products);
+            res.json({
+                status: 'Success',
+                result: products.length,
+                products: products
+            });
         } catch (err) {
             return res.status(500).json({ msg: err.message });
         }
