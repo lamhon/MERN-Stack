@@ -1,11 +1,12 @@
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
-import Home from '../components/content/home/Home.js';
-import About from '../components/content/about/About.js';
-import Contact from "../components/content/contact/Contact.js";
-import Login from "../components/content/login/Login.js";
-import Register from "../components/content/register/Register.js";
-import Product from "../components/content/product/Product.js";
-import Cart from "../components/content/cart/Cart.js";
+import { Routes, Route } from "react-router-dom";
+import Home from '../components/content/home/Home';
+import About from '../components/content/about/About';
+import Contact from "../components/content/contact/Contact";
+import Login from "../components/content/login/Login";
+import Register from "../components/content/register/Register";
+import Product from "../components/content/product/Product";
+import Cart from "../components/content/cart/Cart";
+import Checkout from '../components/content/checkout/Checkout';
 
 export default function Redirect() {
     return (
@@ -17,7 +18,8 @@ export default function Redirect() {
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
                 <Route path="/product/:id" element={<Product />} />
-                <Route path="/cart" element={<Cart />}/>
+                <Route path="/cart" element={<Cart />} />
+                <Route path="/checkout" element={<Checkout />} />
             </Routes>
         </div>
     );

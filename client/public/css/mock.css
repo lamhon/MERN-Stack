@@ -1,0 +1,55 @@
+.mock{
+    display: flex;
+    justify-content: space-around;
+    padding: 30px;
+}
+
+.mock__row1{
+    
+}
+
+form{
+    font-size: 18px;
+}
+
+.mock__input{
+    margin-bottom: 10px;
+}
+
+.mock__input > label{
+    position: relative;
+    min-width: 100px;
+}
+
+.mock__input > label > span{
+    position: absolute;
+    right:0;
+    color: red;
+    font-weight: 600;
+    font-size: 20px;
+}
+
+.mock__input #field__input{
+    min-height: 40px;
+    min-width: 500px;
+    font-size: 18px;
+    /* border-radius: 5px; */
+}
+
+.add-1{
+    margin-top: 15px;
+    font-size: 18px;
+}
+
+.table{
+    font-size: 18px;
+}
+
+.table__total{
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.table__total span{
+    color: red;
+}
