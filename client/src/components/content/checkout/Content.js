@@ -4,6 +4,14 @@ import axios from 'axios';
 
 function Content() {
     const state = useContext(GlobalState);
+
+    // Check login
+    const [isLogged] = state.usersAPI.isLogged;
+
+    if(!isLogged){
+        window.location.href="/";
+    }
+
     // get cart
     const [cart, setCart] = state.usersAPI.cart;
     // get user id
