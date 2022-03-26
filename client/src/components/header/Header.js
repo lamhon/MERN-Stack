@@ -202,7 +202,7 @@ function Header() {
                                     </ul>
                                 </li>
                                 <li><a href="codes.html" className="hyper"> <span>Codes</span></a></li>
-                                <li><a href="/contact" className="hyper"><span>Contact Us</span></a></li>
+                                <li><Link to="/contact" className="hyper"><span>Contact Us</span></Link></li>
                             </ul>
                         </div>
                     </nav>

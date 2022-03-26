@@ -2,12 +2,13 @@ import React, { useState, useContext } from 'react';
 import { GlobalState } from '../../.././GlobalState';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import Banner from '../Banner';
 
 function Content() {
     const state = useContext(GlobalState);
     const [isLogged] = state.usersAPI.isLogged;
 
-    if(isLogged) {
+    if (isLogged) {
         window.location.href = "/";
     }
 
@@ -34,47 +35,51 @@ function Content() {
 
 
     return (
-        <div className="login">
-            <div className="main-agileits">
-                <div className="form-w3agile">
-                    <h3>Login</h3>
-                    <form onSubmit={loginSubmit}>
-                        <div className="key">
-                            <i className="fa fa-envelope" aria-hidden="true" />
-                            <input
-                                type="text"
-                                defaultValue="Email"
-                                name="email"
-                                value={user.email}
-                                onChange={onChangeInput}
-                                onfocus="this.value = '';"
-                                onblur="if (this.value == '') {this.value = 'Email';}"
-                                required />
-                            <div className="clearfix" />
-                        </div>
-                        <div className="key">
-                            <i className="fa fa-lock" aria-hidden="true" />
-                            <input
-                                type="password"
-                                defaultValue="Password"
-                                name="password"
-                                value={user.password}
-                                onChange={onChangeInput}
-                                onfocus="this.value = '';"
-                                onblur="if (this.value == '') {this.value = 'Password';}"
-                                required />
-                            <div className="clearfix" />
-                        </div>
-                        <input type="submit" />
-                    </form>
-                </div>
-                <div className="forg">
-                    <Link to="/" className="forg-left">Forgot Password</Link>
-                    <Link to="/register" className="forg-right">Register</Link>
-                    <div className="clearfix" />
+        <>
+            <Banner link="/" name="Login" />
+            <div className="login">
+                <div className="main-agileits">
+                    <div className="form-w3agile">
+                        <h3>Login</h3>
+                        <form onSubmit={loginSubmit}>
+                            <div className="key">
+                                <i className="fa fa-envelope" aria-hidden="true" />
+                                <input
+                                    type="text"
+                                    defaultValue="Email"
+                                    name="email"
+                                    value={user.email}
+                                    onChange={onChangeInput}
+                                    onfocus="this.value = '';"
+                                    onblur="if (this.value == '') {this.value = 'Email';}"
+                                    required />
+                                <div className="clearfix" />
+                            </div>
+                            <div className="key">
+                                <i className="fa fa-lock" aria-hidden="true" />
+                                <input
+                                    type="password"
+                                    defaultValue="Password"
+                                    name="password"
+                                    value={user.password}
+                                    onChange={onChangeInput}
+                                    onfocus="this.value = '';"
+                                    onblur="if (this.value == '') {this.value = 'Password';}"
+                                    required />
+                                <div className="clearfix" />
+                            </div>
+                            <input type="submit" />
+                        </form>
+                    </div>
+                    <div className="forg">
+                        <Link to="/" className="forg-left">Forgot Password</Link>
+                        <Link to="/register" className="forg-right">Register</Link>
+                        <div className="clearfix" />
+                    </div>
                 </div>
             </div>
-        </div>
+        </>
+
     );
 }
 

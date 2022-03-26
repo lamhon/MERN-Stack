@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { GlobalState } from '../../.././GlobalState';
 import axios from 'axios';
+import Banner from '../Banner';
 
 function Content() {
     const state = useContext(GlobalState);
@@ -8,8 +9,8 @@ function Content() {
     // Check login
     const [isLogged] = state.usersAPI.isLogged;
 
-    if(!isLogged){
-        window.location.href="/";
+    if (!isLogged) {
+        window.location.href = "/";
     }
 
     // get cart
@@ -56,7 +57,7 @@ function Content() {
         e.preventDefault();
         try {
             // Check cart exist product
-            if(cart.length !== 0){
+            if (cart.length !== 0) {
                 // Insert order
                 await axios.post('/api/checkout', order, {
                     headers: { Authorization: token }
@@ -67,7 +68,7 @@ function Content() {
                     headers: { Authorization: token }
                 });
                 // Clear cart end
-    
+
                 alert('Checkout successfully');
             }
 
@@ -91,88 +92,92 @@ function Content() {
     }, [cart]);
 
     return (
-        <div className="mock">
-            <div className="mock_row1">
-                <form onSubmit={orderSubmit}>
-                    <div className="mock__input">
-                        <label htmlFor="field__input">Name: <span>*</span></label>
-                        <input
-                            id="field__input"
-                            type="text"
-                            name="name"
-                            value={order.name}
-                            onChange={onChangeInput}
-                            required />
-                    </div>
-                    <div className="mock__input">
-                        <label htmlFor="field__input">Address: <span>*</span></label>
-                        <input
-                            id="field__input"
-                            type="text"
-                            name="address"
-                            value={order.address}
-                            onChange={onChangeInput}
-                            required />
-                    </div>
-                    <div className="mock__input">
-                        <label htmlFor="field__input">Phone: <span>*</span></label>
-                        <input
-                            id="field__input"
-                            type="text"
-                            name="phone"
-                            value={order.phone}
-                            onChange={onChangeInput}
-                            required />
-                    </div>
-                    <div className="mock__input">
-                        <label htmlFor="field__input">Email: <span>*</span></label>
-                        <input
-                            id="field__input"
-                            type="email"
-                            name="email"
-                            value={order.email}
-                            onChange={onChangeInput}
-                            required />
-                    </div>
-                    <div className="mock__input">
-                        <label htmlFor="field__input">Note: </label>
-                        <input
-                            id="field__input"
-                            type="text"
-                            name="note"
-                            value={order.note}
-                            onChange={onChangeInput} />
-                    </div>
-                    <button
-                        className="add-1">
-                        Check out
-                    </button>
-                </form>
-            </div>
-            <div className="mock_row2">
-                <table className="table">
-                    <tbody>
-                        <tr>
-                            <th className="t-head">Product</th>
-                            <th className="t-head">Total</th>
-                        </tr>
-                        {
-                            cart.map(product => (
-                                <tr className="cross">
-                                    <td className="t-data">{product.product_id} ( x<span>{product.quantity}</span> )</td>
-                                    <td className="t-data">{product.price * product.quantity}</td>
-                                </tr>
-                            ))
-                        }
-                        <tr>
+        <>
+            <Banner link="/" name="Checkout" />
+            <div className="mock">
+                <div className="mock_row1">
+                    <form onSubmit={orderSubmit}>
+                        <div className="mock__input">
+                            <label htmlFor="field__input">Name: <span>*</span></label>
+                            <input
+                                id="field__input"
+                                type="text"
+                                name="name"
+                                value={order.name}
+                                onChange={onChangeInput}
+                                required />
+                        </div>
+                        <div className="mock__input">
+                            <label htmlFor="field__input">Address: <span>*</span></label>
+                            <input
+                                id="field__input"
+                                type="text"
+                                name="address"
+                                value={order.address}
+                                onChange={onChangeInput}
+                                required />
+                        </div>
+                        <div className="mock__input">
+                            <label htmlFor="field__input">Phone: <span>*</span></label>
+                            <input
+                                id="field__input"
+                                type="text"
+                                name="phone"
+                                value={order.phone}
+                                onChange={onChangeInput}
+                                required />
+                        </div>
+                        <div className="mock__input">
+                            <label htmlFor="field__input">Email: <span>*</span></label>
+                            <input
+                                id="field__input"
+                                type="email"
+                                name="email"
+                                value={order.email}
+                                onChange={onChangeInput}
+                                required />
+                        </div>
+                        <div className="mock__input">
+                            <label htmlFor="field__input">Note: </label>
+                            <input
+                                id="field__input"
+                                type="text"
+                                name="note"
+                                value={order.note}
+                                onChange={onChangeInput} />
+                        </div>
+                        <button
+                            className="add-1">
+                            Check out
+                        </button>
+                    </form>
+                </div>
+                <div className="mock_row2">
+                    <table className="table">
+                        <tbody>
+                            <tr>
+                                <th className="t-head">Product</th>
+                                <th className="t-head">Total</th>
+                            </tr>
                             {
-                                <td className="table__total" colSpan={2}>Total: <span>{total}</span></td>
+                                cart.map(product => (
+                                    <tr className="cross">
+                                        <td className="t-data">{product.product_id} ( x<span>{product.quantity}</span> )</td>
+                                        <td className="t-data">{product.price * product.quantity}</td>
+                                    </tr>
+                                ))
                             }
-                        </tr>
-                    </tbody>
-                </table>
+                            <tr>
+                                {
+                                    <td className="table__total" colSpan={2}>Total: <span>{total}</span></td>
+                                }
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
-        </div>
+        </>
+
     );
 }
 
