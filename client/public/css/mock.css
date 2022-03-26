@@ -19,6 +19,7 @@ form{
 .mock__input > label{
     position: relative;
     min-width: 100px;
+    margin-right: 5px;
 }
 
 .mock__input > label > span{
@@ -52,4 +53,8 @@ form{
 
 .table__total span{
     color: red;
+}
+
+.mock_row1 > form > button{
+    border: none;
 }

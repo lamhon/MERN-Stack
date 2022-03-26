@@ -5,6 +5,7 @@ function UsersAPI(token) {
     const [isLogged, setIsLogged] = useState(false);
     const [isAdmin, setIsAdmin] = useState(false);
     const [cart, setCart] = useState([]);
+    const [user, setUser] = useState({});
 
     useEffect(() => {
         if (token) {
@@ -18,6 +19,9 @@ function UsersAPI(token) {
                     res.data.role === 1 ? setIsAdmin(true) : setIsAdmin(false);
 
                     setCart(res.data.cart);
+
+                    setUser(res.data);
+                    console.log(res);
                 } catch (err) {
                     alert(err.response.data.msg);
                 }
@@ -50,7 +54,8 @@ function UsersAPI(token) {
         isLogged: [isLogged, setIsLogged],
         isAdmin: [isAdmin, setIsAdmin],
         cart: [cart, setCart],
-        addCart: addCart
+        addCart: addCart,
+        user: user
     }
 }
 

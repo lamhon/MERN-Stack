@@ -120,7 +120,7 @@ const userController = {
 
             return res.json({msg: "Added to cart"});
         } catch (err) {
-            return res.status(500).json({msg: err.message})
+            return res.status(500).json({msg: err.message});
         }
     }
 }

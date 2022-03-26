@@ -8,6 +8,7 @@ function Content() {
     const [cart, setCart] = state.usersAPI.cart;
     const [token] = state.token;
     const [total, setTotal] = useState(0);
+    
 
     useEffect(() => {
         const getTotal = () => {
@@ -17,13 +18,13 @@ function Content() {
 
             setTotal(total);
         }
-
         getTotal();
     }, [cart]);
 
+
     const addToCart = async () => {
-        await axios.patch('/user/addcart', {cart}, {
-            headers: {Authorization: token}
+        await axios.patch('/user/addcart', { cart }, {
+            headers: { Authorization: token }
         });
     }
 
@@ -52,10 +53,10 @@ function Content() {
     }
 
     // Remove button
-    const removeItem = (id) =>{
-        if(window.confirm("Do you want to remove this item?")){
-            cart.forEach((item, index) =>{
-                if(item._id === id){
+    const removeItem = (id) => {
+        if (window.confirm("Do you want to remove this item?")) {
+            cart.forEach((item, index) => {
+                if (item._id === id) {
                     cart.splice(index, 1);
                 }
             });
@@ -119,7 +120,7 @@ function Content() {
                     </tbody>
                 </table>
                 <p style={{ marginBottom: '5px', fontSize: '25px' }}>Total: $ {total}</p>
-                <Link className=" add-1" to="single.html">Go to buy</Link>
+                <Link className=" add-1" to="/checkout">Go to buy</Link>
             </div>
         </div>
     );

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 function Content() {
@@ -8,19 +8,19 @@ function Content() {
         name: '', email: '', password: ''
     });
 
-    const onChangeInput = e =>{
-        const {name, value} = e.target;
-        setUser({...user, [name]:value});
+    const onChangeInput = e => {
+        const { name, value } = e.target;
+        setUser({ ...user, [name]: value });
     }
 
-    const registerSubmit =async e=>{
+    const registerSubmit = async e => {
         e.preventDefault();
         try {
-            await axios.post('/user/register', {...user});
+            await axios.post('/user/register', { ...user });
 
             localStorage.setItem('firstLogin', true);
 
-            window.location.href="/";
+            window.location.href = "/";
         } catch (err) {
             alert(err.response.data.msg);
         }
