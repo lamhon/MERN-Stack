@@ -58,3 +58,23 @@ form{
 .mock_row1 > form > button{
     border: none;
 }
+
+.page_number{
+    font-size: 18px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.number__paging{
+    border: 1.5px solid rgb(3,148,69);
+    min-width: 30px;
+    min-height: 30px;
+    text-align: center;
+    cursor: pointer;
+    margin-right: 3px;
+    transition: 0.3s ease-in-out;
+}
+
+.number__paging:hover{
+    background-color: rgb(3,148,69);
+}

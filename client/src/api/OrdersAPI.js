@@ -17,6 +17,10 @@ function OrdersAPI(token) {
         setOrders(res.data.order);
     }
 
+    const getOrderByUser = async (user) => {
+        
+    }
+
     useEffect(() => {
         getOrders();
     }, []);

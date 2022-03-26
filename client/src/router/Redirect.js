@@ -7,6 +7,7 @@ import Register from "../components/content/register/Register";
 import Product from "../components/content/product/Product";
 import Cart from "../components/content/cart/Cart";
 import Checkout from '../components/content/checkout/Checkout';
+import History from '../components/content/history/History';
 
 export default function Redirect() {
     return (
@@ -20,6 +21,7 @@ export default function Redirect() {
                 <Route path="/product/:id" element={<Product />} />
                 <Route path="/cart" element={<Cart />} />
                 <Route path="/checkout" element={<Checkout />} />
+                <Route path="/history" element={<History />} />
             </Routes>
         </div>
     );

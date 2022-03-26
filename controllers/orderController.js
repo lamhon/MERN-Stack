@@ -68,6 +68,18 @@ const OrderController = {
         } catch (err) {
             return res.status(500).json({ msg: err.message });
         }
+    },
+    getOrdersByUser: async (req, res) => {
+        try {
+            const { userId } = req.body;
+
+            const orders = await Orders.find({ user: userId });
+
+
+            res.json(orders);
+        } catch (err) {
+            return res.status(500).json({ msg: err.message });
+        }
     }
 }
 
