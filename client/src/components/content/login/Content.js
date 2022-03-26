@@ -1,8 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import { GlobalState } from '../../.././GlobalState';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 function Content() {
+    const state = useContext(GlobalState);
+    const [isLogged] = state.usersAPI.isLogged;
+
+    if(isLogged) {
+        window.location.href = "/";
+    }
+
     const [user, setUser] = useState({
         email: '', password: ''
     });
