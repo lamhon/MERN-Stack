@@ -11,6 +11,6 @@ router.post('/confirm_order', authAdmin, orderController.confirm_Order);
 
 router.post('/delivered_order',authAdmin, orderController.delivered_Order);
 
-router.get('/myorder', auth, orderController.getOrdersByUser);
+router.post('/myorder', orderController.getOrdersByUser);
 
 module.exports = router;

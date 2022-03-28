@@ -72,9 +72,10 @@ const OrderController = {
     getOrdersByUser: async (req, res) => {
         try {
             const { userId } = req.body;
-
+            console.log(userId)
             const orders = await Orders.find({ user: userId });
 
+            // console.log(userId);
 
             res.json(orders);
         } catch (err) {

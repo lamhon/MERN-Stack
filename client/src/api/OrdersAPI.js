@@ -3,31 +3,40 @@ import axios from 'axios';
 
 function OrdersAPI(token) {
     const [orders, setOrders] = useState([]);
+    const [myOrders, setMyOrders] = useState([]);
 
-    const getOrders = async () => {
-        const res = await axios.get('/api/order');
-        setOrders(res.data.order);
-        // console.log(res);
-    }
+    // const getOrders = async () => {
+    //     const res = await axios.get('/api/order');
+    //     setOrders(res.data.order);
+    //     // console.log(res);
+    // }
+
+    
 
     const checkout = async (order) => {
         const res = await axios.get('/api/checkout', order, {
-            headers: {Authorization: token}
+            headers: { Authorization: token }
         });
         setOrders(res.data.order);
     }
 
     const getOrderByUser = async (user) => {
-        
+        const res = await axios.get('/api/myorder', user, {
+            header: { Authorization: token }
+        });
+        console.log(res);
+        // setOrders(res.data.order)
     }
 
-    useEffect(() => {
-        getOrders();
-    }, []);
+    // useEffect(() => {
+    //     getOrders();
+    // }, []);
 
     return {
         orders: [orders, setOrders],
-        checkout: checkout
+        myOrders: [myOrders, setMyOrders],
+        checkout: checkout,
+        getOrderByUser: getOrderByUser
     }
 }
 
