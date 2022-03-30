@@ -10,10 +10,23 @@ function Content() {
     // get token
     const [token] = state.token;
 
+    // Create state status
+    const [status, setStatus] = useState('all');
+    // Create array status option
+    const categories = ['all', 'pending', 'delivering', 'delivered'];
+
+    // get all Order
     const [myOrders, setMyOrders] = useState([]);
-    const [pendingOrders, setPendingOrders] = useState([]);
-    const [confirmOrders, setConfirmOrders] = useState([]);
-    const [deliveredOrders, setDeliveredOrders] = useState([]);
+
+    // get order to show on table
+    const [showData, setShowData] = useState([]);
+
+    // create state page
+    const [currentPage, setCurrentPage] = useState('page1');
+
+    const [page, setPage] = useState(1);
+
+    // Get api my order
     useEffect(() => {
         if (token) {
             const getOrder = async () => {
@@ -30,14 +43,276 @@ function Content() {
             getOrder();
         }
     }, [token]);
-    console.log(myOrders);
 
-    useEffect(() => {
-        setPendingOrders(myOrders.filter(myOrder => (typeof myOrder.date_confirm === 'undefined' && typeof myOrder.date_delivered === 'undefined')));
-        setConfirmOrders(myOrders.filter(myOrder => (typeof myOrder.date_confirm !== 'undefined' && typeof myOrder.date_delivered === 'undefined')));
-        setDeliveredOrders(myOrders.filter(myOrder => (typeof myOrder.date_delivered !== 'undefined')));
-    }, [myOrders])
-    // console.log(confirmOrders);
+    // Func change category
+    const clickCategory = (category) => {
+        let arr = [];
+
+        // Change category
+        setStatus(category);
+
+        // Change data to show on table
+        if (category === 'all') {
+            setShowData(myOrders);
+        } else if (category === 'pending') {
+            myOrders.forEach(order => {
+                if (typeof order.date_confirm === 'undefined' && typeof order.date_delivered === 'undefined') {
+                    arr.push(order);
+                }
+            });
+            setShowData(arr);
+        } else if (category === 'delivering') {
+            myOrders.forEach(order => {
+                if (typeof order.date_confirm !== 'undefined' && typeof order.date_delivered === 'undefined') {
+                    arr.push(order);
+                }
+                setShowData(arr);
+            });
+        } else {
+            myOrders.forEach(order => {
+                if (typeof order.date_delivered !== 'undefined') {
+                    arr.push(order);
+                }
+                setShowData(arr);
+            });
+        }
+    }
+
+    // Func render paging
+    const Paging = (data) => {
+        if (data.length === 0 || data.length === 1) {
+            return (
+                <div className="page_number">
+                    <div className="number__paging">1</div>
+                </div>
+            )
+        } else {
+            // get count page
+            let pages = calPaging(data.length);
+            return (
+                <div className="page_number">
+                    <div className="number__paging">«</div>
+                    {
+                        pages.map((page, index) => (
+                            <div
+                                // set current page and set page
+                                onClick={() => { setCurrentPage(page); setPage(index + 1)}}
+                                style={(currentPage === page) ? { backgroundColor: 'rgb(3,148,69)' } : {}}
+                                className="number__paging"
+                                key={page}
+                            >{index + 1}
+                            </div>
+                        ))
+                    }
+                    <div className="number__paging">»</div>
+                </div>
+            )
+        }
+    }
+
+    // Func render table
+    const TableData = () => {
+        let arr = [];
+        if (status === 'all') {
+            if (showData.length === 0) {
+                arr = myOrders;
+            } else {
+                arr = showData;
+            }
+            let showArr = getListPaging(arr, page);
+            return (
+                <>
+                    <div className="header__content"><h3 style={{ textAlign: 'center' }}>{status.toUpperCase()}</h3></div>
+                    <table className="table">
+                        <tbody>
+                            <tr>
+                                <th className="t-head">No</th>
+                                <th className="t-head">ID</th>
+                                <th className="t-head">To</th>
+                                <th className="t-head">Phone</th>
+                                <th className="t-head">Email</th>
+                                <th className="t-head">Address</th>
+                                <th className="t-head">Date order</th>
+                                <th className="t-head">Status</th>
+                            </tr>
+                            {
+                                showArr.map((data, index) => (
+                                    <tr>
+                                        <td className="t-data">{(page - 1)*10 + index + 1}</td>
+                                        <td className="t-data">{data._id}</td>
+                                        <td className="t-data">{data.name}</td>
+                                        <td className="t-data">{data.phone}</td>
+                                        <td className="t-data">{data.email}</td>
+                                        <td className="t-data">{data.address}</td>
+                                        <td className="t-data">{data.date_order}</td>
+                                        <td className="t-data">
+                                            {
+                                                (typeof data.date_confirm === 'undefined' && typeof data.date_delivered === 'undefined') ?
+                                                    (
+                                                        'Pending'
+                                                    ) :
+                                                    (
+                                                        (typeof data.date_confirm === 'undefined' && typeof data.date_delivered !== 'undefined') ?
+                                                            'Delivering' : 'Delivered'
+                                                    )
+                                            }
+                                        </td>
+                                    </tr>
+                                ))
+                            }
+                        </tbody>
+                    </table>
+                    {
+                        Paging(arr)
+                    }
+                </>
+            )
+        } else if (status === 'pending') {
+            arr = showData;
+            let showArr = getListPaging(arr, page);
+            return (
+                <>
+                    <div className="header__content"><h3 style={{ textAlign: 'center' }}>{status.toUpperCase()}</h3></div>
+                    <table className="table">
+                        <tbody>
+                            <tr>
+                                <th className="t-head">No</th>
+                                <th className="t-head">ID</th>
+                                <th className="t-head">To</th>
+                                <th className="t-head">Phone</th>
+                                <th className="t-head">Email</th>
+                                <th className="t-head">Address</th>
+                                <th className="t-head">Date order</th>
+                            </tr>
+                            {
+                                showArr.map((data, index) => (
+                                    <tr>
+                                        <td className="t-data">{(page - 1)*10 + index + 1}</td>
+                                        <td className="t-data">{data._id}</td>
+                                        <td className="t-data">{data.name}</td>
+                                        <td className="t-data">{data.phone}</td>
+                                        <td className="t-data">{data.email}</td>
+                                        <td className="t-data">{data.address}</td>
+                                        <td className="t-data">{data.date_order}</td>
+                                    </tr>
+                                ))
+                            }
+                        </tbody>
+                    </table>
+                    {
+                        Paging(showData)
+                    }
+                </>
+
+            )
+        } else if (status === 'delivering') {
+            arr = showData;
+            let showArr = getListPaging(arr, page);
+            return (
+                <>
+                    <div className="header__content"><h3 style={{ textAlign: 'center' }}>{status.toUpperCase()}</h3></div>
+                    <table className="table">
+                        <tbody>
+                            <tr>
+                                <th className="t-head">No</th>
+                                <th className="t-head">ID</th>
+                                <th className="t-head">To</th>
+                                <th className="t-head">Phone</th>
+                                <th className="t-head">Email</th>
+                                <th className="t-head">Address</th>
+                                <th className="t-head">Date order</th>
+                                <th className="t-head">Date confirm</th>
+                            </tr>
+                            {
+                                showArr.map((data, index) => (
+                                    <tr>
+                                        <th className="t-data">{(page - 1)*10 + index + 1}</th>
+                                        <th className="t-data">{data._id}</th>
+                                        <th className="t-data">{data.name}</th>
+                                        <th className="t-data">{data.phone}</th>
+                                        <th className="t-data">{data.email}</th>
+                                        <th className="t-data">{data.address}</th>
+                                        <th className="t-data">{data.date_order}</th>
+                                        <th className="t-data">{data.date_confirm}</th>
+                                    </tr>
+                                ))
+                            }
+                        </tbody>
+                    </table>
+                    {
+                        Paging(showData)
+                    }
+                </>
+
+            )
+        } else {
+            arr = showData;
+            let showArr = getListPaging(arr, page);
+            return (
+                <>
+                    <div className="header__content"><h3 style={{ textAlign: 'center' }}>{status.toUpperCase()}</h3></div>
+                    <table className="table">
+                        <tbody>
+                            <tr>
+                                <th className="t-head">No</th>
+                                <th className="t-head">ID</th>
+                                <th className="t-head">To</th>
+                                <th className="t-head">Phone</th>
+                                <th className="t-head">Email</th>
+                                <th className="t-head">Address</th>
+                                <th className="t-head">Date order</th>
+                                <th className="t-head">Received date</th>
+                            </tr>
+                            {
+                                showArr.map((data, index) => (
+                                    <tr>
+                                        <td className="t-data">{(page - 1)*10 + index + 1}</td>
+                                        <td className="t-data">{data._id}</td>
+                                        <td className="t-data">{data.name}</td>
+                                        <td className="t-data">{data.phone}</td>
+                                        <td className="t-data">{data.email}</td>
+                                        <td className="t-data">{data.address}</td>
+                                        <td className="t-data">{data.date_order}</td>
+                                        <td className="t-data">{data.date_delivered}</td>
+                                    </tr>
+                                ))
+                            }
+                        </tbody>
+                    </table>
+                    {
+                        Paging(showData)
+                    }
+                </>
+            )
+        }
+    }
+
+    // Func count page
+    const calPaging = (length) => {
+        let arr = [];
+        let numberPaging = Math.ceil(length / 10);
+        for (let i = 0; i < numberPaging; i++) {
+            let num = i + 1;
+            let pageNum = "page" + num;
+            arr.push(pageNum);
+        }
+
+        return arr;
+    }
+
+    // Func get list data per page
+    const getListPaging = (lst, page) => {
+        const arr = [];
+
+        const check = (item, index) => {
+            if (((Math.floor(index / 10) + 1) === page)) {
+                arr.push(item);
+            }
+        }
+
+        lst.forEach(check);
+        return arr;
+    }
     return (
         <>
             <Banner link="/" name="History" />
@@ -46,189 +321,25 @@ function Content() {
                     <div className="tab-head ">
                         <nav className="nav-sidebar">
                             <ul className="nav tabs ">
-                                <li className="active"><a href="#tab1" data-toggle="tab">Your orders</a></li>
-                                <li className><a href="#tab2" data-toggle="tab">Pending</a></li>
-                                <li className><a href="#tab3" data-toggle="tab">Delivering</a></li>
-                                <li className><a href="#tab4" data-toggle="tab">Delivered</a></li>
+                                {
+                                    categories.map(category => (
+                                        <li>
+                                            <a
+                                                onClick={() => { clickCategory(category); setPage(1)}}
+                                                key={category}
+                                                href="#!"
+                                                style={{ cursor: 'pointer' }}>{category.toUpperCase()}</a>
+                                        </li>
+                                    ))
+                                }
                             </ul>
                         </nav>
                         <div className=" tab-content tab-content-t ">
-                            <div className="tab-pane active text-style" id="tab1">
+                            <div className="tab-pane active text-style">
                                 <div>
-                                    <div className="header__content"><h3 style={{ textAlign: 'center' }}>Orders</h3></div>
-                                    <table className="table">
-                                        <tbody>
-                                            <tr>
-                                                <th>No</th>
-                                                <th>ID</th>
-                                                <th>To</th>
-                                                <th>Phone</th>
-                                                <th>Email</th>
-                                                <th>Address</th>
-                                                <th>Date order</th>
-                                                <th>Status</th>
-                                            </tr>
-                                            {
-                                                myOrders.map(myOrder => (
-                                                    <tr>
-                                                        <td>1</td>
-                                                        <td>{myOrder._id}</td>
-                                                        <td>{myOrder.name}</td>
-                                                        <td>{myOrder.phone}</td>
-                                                        <td>{myOrder.email}</td>
-                                                        <td>{myOrder.address}</td>
-                                                        <td>{myOrder.date_order}</td>
-                                                        <td>
-                                                            {
-                                                                (typeof myOrder.date_confirm === 'undefined' && typeof myOrder.date_delivered === 'undefined') ?
-                                                                    'Pending' : (
-                                                                        (typeof myOrder.date_confirm === 'undefined' && typeof myOrder.date_delivered !== 'undefined') ?
-                                                                            'Delivering' : 'Delivered'
-                                                                    )
-                                                            }
-                                                        </td>
-                                                    </tr>
-                                                ))
-                                            }
-                                        </tbody></table>
-                                    <div className="page_number">
-                                        <div className="number__paging">«</div>
-                                        <div className="number__paging">1</div>
-                                        <div className="number__paging">2</div>
-                                        <div className="number__paging">3</div>
-                                        <div className="number__paging">4</div>
-                                        <div className="number__paging">5</div>
-                                        <div className="number__paging">6</div>
-                                        <div className="number__paging">7</div>
-                                        <div className="number__paging">»</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="tab-pane  text-style" id="tab2">
-                                <div>
-                                    <div className="header__content"><h3 style={{ textAlign: 'center' }}>Pending</h3></div>
-                                    <table className="table">
-                                        <tbody>
-                                            <tr>
-                                                <th>No</th>
-                                                <th>ID</th>
-                                                <th>To</th>
-                                                <th>Phone</th>
-                                                <th>Email</th>
-                                                <th>Address</th>
-                                                <th>Date order</th>
-                                            </tr>
-                                            {
-                                                pendingOrders.map(pendingOrder => (
-                                                    <tr>
-                                                        <td>1</td>
-                                                        <td>{pendingOrder._id}</td>
-                                                        <td>{pendingOrder.name}</td>
-                                                        <td>{pendingOrder.phone}</td>
-                                                        <td>{pendingOrder.email}</td>
-                                                        <td>{pendingOrder.address}</td>
-                                                        <td>{pendingOrder.date_order}</td>
-                                                    </tr>
-                                                ))
-                                            }
-                                        </tbody></table>
-                                    <div className="page_number">
-                                        <div className="number__paging">«</div>
-                                        <div className="number__paging">1</div>
-                                        <div className="number__paging">2</div>
-                                        <div className="number__paging">3</div>
-                                        <div className="number__paging">4</div>
-                                        <div className="number__paging">5</div>
-                                        <div className="number__paging">6</div>
-                                        <div className="number__paging">7</div>
-                                        <div className="number__paging">»</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="tab-pane  text-style" id="tab3">
-                                <div>
-                                    <div className="header__content"><h3 style={{ textAlign: 'center' }}>Delivering</h3></div>
-                                    <table className="table">
-                                        <tbody>
-                                            <tr>
-                                                <th>No</th>
-                                                <th>ID</th>
-                                                <th>To</th>
-                                                <th>Phone</th>
-                                                <th>Email</th>
-                                                <th>Address</th>
-                                                <th>Date order</th>
-                                                <th>Date confirm</th>
-                                            </tr>
-                                            {
-                                                confirmOrders.map(confirmOrder => (
-                                                    <tr>
-                                                        <td>1</td>
-                                                        <td>{confirmOrder._id}</td>
-                                                        <td>{confirmOrder.name}</td>
-                                                        <td>{confirmOrder.phone}</td>
-                                                        <td>{confirmOrder.email}</td>
-                                                        <td>{confirmOrder.address}</td>
-                                                        <td>{confirmOrder.date_order}</td>
-                                                        <td>{confirmOrder.date_confirm}</td>
-                                                    </tr>
-                                                ))
-                                            }
-                                        </tbody></table>
-                                    <div className="page_number">
-                                        <div className="number__paging">«</div>
-                                        <div className="number__paging">1</div>
-                                        <div className="number__paging">2</div>
-                                        <div className="number__paging">3</div>
-                                        <div className="number__paging">4</div>
-                                        <div className="number__paging">5</div>
-                                        <div className="number__paging">6</div>
-                                        <div className="number__paging">7</div>
-                                        <div className="number__paging">»</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="tab-pane text-style" id="tab4">
-                                <div>
-                                    <div className="header__content"><h3 style={{ textAlign: 'center' }}>Delivered</h3></div>
-                                    <table className="table">
-                                        <tbody>
-                                            <tr>
-                                                <th>No</th>
-                                                <th>ID</th>
-                                                <th>To</th>
-                                                <th>Phone</th>
-                                                <th>Email</th>
-                                                <th>Address</th>
-                                                <th>Date order</th>
-                                                <th>Received date</th>
-                                            </tr>
-                                            {
-                                                deliveredOrders.map(deliveredOrder => (
-                                                    <tr>
-                                                        <td>1</td>
-                                                        <td>{deliveredOrder._id}</td>
-                                                        <td>{deliveredOrder.name}</td>
-                                                        <td>{deliveredOrder.phone}</td>
-                                                        <td>{deliveredOrder.email}</td>
-                                                        <td>{deliveredOrder.address}</td>
-                                                        <td>{deliveredOrder.date_order}</td>
-                                                        <td>{deliveredOrder.date_delivered}</td>
-                                                    </tr>
-                                                ))
-                                            }
-                                        </tbody></table>
-                                    <div className="page_number">
-                                        <div className="number__paging">«</div>
-                                        <div className="number__paging">1</div>
-                                        <div className="number__paging">2</div>
-                                        <div className="number__paging">3</div>
-                                        <div className="number__paging">4</div>
-                                        <div className="number__paging">5</div>
-                                        <div className="number__paging">6</div>
-                                        <div className="number__paging">7</div>
-                                        <div className="number__paging">»</div>
-                                    </div>
+                                    {
+                                        TableData()
+                                    }
                                 </div>
                             </div>
                         </div>

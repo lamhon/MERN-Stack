@@ -24,9 +24,6 @@ function Content() {
     // get token
     const [token] = state.token;
 
-    console.log("First cart");
-    console.log(cart);
-
     const [total, setTotal] = useState(0);
 
 
@@ -36,13 +33,11 @@ function Content() {
         let productsBuy = [];
         cart.map(item => productsBuy = [...productsBuy, { _id: item._id, product_id: item.product_id, title: item.title, price: item.price, sale: item.sale, image: item.image, category: item.category, quantity: item.quantity }]);
         setInfo(productsBuy);
-        console.log("add product from cart");
     }, [cart]);
 
     // Set info and user of order
     useEffect(() => {
         setOrder({ ...order, info: info, user: user_id });
-        console.log("set info and user")
         // setCart()
     }, [info]);
 
