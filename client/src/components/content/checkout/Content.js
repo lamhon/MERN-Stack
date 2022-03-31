@@ -52,7 +52,7 @@ function Content() {
         e.preventDefault();
         try {
             // Check cart exist product
-            if (cart.length !== 0) {
+            if (cart.length > 0) {
                 // Insert order
                 await axios.post('/api/checkout', order, {
                     headers: { Authorization: token }
@@ -65,6 +65,8 @@ function Content() {
                 // Clear cart end
 
                 alert('Checkout successfully');
+            }else{
+                alert('Cart empty');
             }
 
             window.location.href = "/";

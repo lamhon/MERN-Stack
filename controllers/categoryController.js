@@ -19,7 +19,7 @@ const categoryController = {
                 return res.status(400).json({ msg: "This category already exists." });
             }
 
-            const newCategory = new Category({ name });
+            const newCategory = new Category({ name, stt: true });
 
             await newCategory.save();
             res.json('Created category');

@@ -16,7 +16,7 @@ function ProductBottom({ product, isAdmin }) {
                             </Link>
                             <div className="mid-1">
                                 <div className="women">
-                                    <h6><Link to={`product/${product._id}`}>{product.product_id}</Link>(500 g)</h6>
+                                    <h6><Link to={`product/${product._id}`}>{product.product_id}</Link></h6>
                                 </div>
                                 <div className="mid-2">
                                     <p><label>${product.price}</label><em className="item_price">${product.sale}</em></p>

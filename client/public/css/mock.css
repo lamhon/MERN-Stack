@@ -78,3 +78,29 @@ form{
 .number__paging:hover{
     background-color: rgb(3,148,69);
 }
+
+.offer-img > .img-responsive{
+    width: 125px;
+    height: 155px;
+}
+
+#picture-frame > .img-responsive {
+    width:390px;
+    height: 485px;
+}
+
+.btn-nomal{
+    border: none;
+    padding: 5px;
+    background-color: rgb(3,148,69);
+}
+
+.btn-nomal:hover{
+    background-color: #FAB005;
+}
+
+.btn-danger{
+    border: none;
+    padding: 5px;
+    background-color: red;
+}
