@@ -60,25 +60,12 @@ function Content() {
                     </td>
                     <td className="t-data">
                         <button onClick={e => { DeleteBtn(category._id) }}
-                            className="btn-danger">Delete</button>
+                            className="btn-dangers">Delete</button>
                     </td>
                 </tr>
             ))
         )
         // console.log(abc);
-    }
-
-    const UpdateArr = () => {
-        let arr = [];
-        categories.forEach(cate => {
-            if (cate._id === idUpdate) {
-                cate.name = valueUpdate;
-                arr.push(cate);
-            } else {
-                arr.push(cate);
-            }
-        });
-        setCategories(arr);
     }
 
     const DeleteBtn = async (id) => {
@@ -189,9 +176,9 @@ function Content() {
                                             <label htmlFor="field__update">Update: </label>
                                             <input onChange={e => { setValueUpdate(e.target.value) }} style={{ minWidth: '200px' }} id="field__update" type="text" />
                                             <button
-                                                onClick={e => setUpdateBtn(false)}
+                                                onClick={e => {setUpdateBtn(false); setIdUpdate('')} }
                                                 style={{ marginLeft: '25px', borderRadius: '50px', heigth: '30px', width: '30px' }}
-                                                className="btn-danger">X</button>
+                                                className="btn-dangers">X</button>
                                             <button
                                                 onClick={e => { ChangeBtn() }}
                                                 style={{ marginLeft: '10px', borderRadius: '50px', height: '30px', width: '30px' }}

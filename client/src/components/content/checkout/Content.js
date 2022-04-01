@@ -95,9 +95,9 @@ function Content() {
                 <div className="mock_row1">
                     <form onSubmit={orderSubmit}>
                         <div className="mock__input">
-                            <label htmlFor="field__input">Name: <span>*</span></label>
+                            <label htmlFor="field__input1">Name: <span>*</span></label>
                             <input
-                                id="field__input"
+                                id="field__input1"
                                 type="text"
                                 name="name"
                                 value={order.name}
@@ -105,9 +105,9 @@ function Content() {
                                 required />
                         </div>
                         <div className="mock__input">
-                            <label htmlFor="field__input">Address: <span>*</span></label>
+                            <label htmlFor="field__input2">Address: <span>*</span></label>
                             <input
-                                id="field__input"
+                                id="field__input2"
                                 type="text"
                                 name="address"
                                 value={order.address}
@@ -115,9 +115,9 @@ function Content() {
                                 required />
                         </div>
                         <div className="mock__input">
-                            <label htmlFor="field__input">Phone: <span>*</span></label>
+                            <label htmlFor="field__input3">Phone: <span>*</span></label>
                             <input
-                                id="field__input"
+                                id="field__input3"
                                 type="text"
                                 name="phone"
                                 value={order.phone}
@@ -125,9 +125,9 @@ function Content() {
                                 required />
                         </div>
                         <div className="mock__input">
-                            <label htmlFor="field__input">Email: <span>*</span></label>
+                            <label htmlFor="field__input4">Email: <span>*</span></label>
                             <input
-                                id="field__input"
+                                id="field__input4"
                                 type="email"
                                 name="email"
                                 value={order.email}
@@ -135,9 +135,9 @@ function Content() {
                                 required />
                         </div>
                         <div className="mock__input">
-                            <label htmlFor="field__input">Note: </label>
+                            <label htmlFor="field__input5">Note: </label>
                             <input
-                                id="field__input"
+                                id="field__input5"
                                 type="text"
                                 name="note"
                                 value={order.note}

@@ -116,6 +116,9 @@
   <script src="%PUBLIC_URL%/js/bootstrap.js"></script>
   <!-- //for bootstrap working -->
   <script type='text/javascript' src="%PUBLIC_URL%/js/jquery.mycart.js"></script>
+
+  // Upload
+  <script class="jsbin" src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
   <!-- <script type="text/javascript">
     
   $(function () {
@@ -129,6 +132,41 @@
     checkoutCart: function (products) { $.each(products, function () { console.log(this); }); }, clickOnAddToCart:
     function ($addTocart) { goToCartIcon($addTocart); }, getDiscountPrice: function (products) { var total=0;
     $.each(products, function () { total +=this.quantity * this.price; }); return total * 1; } }); }); </script> -->
+
+  <script>
+    function readURL(input) {
+      if (input.files && input.files[0]) {
+
+        var reader = new FileReader();
+
+        reader.onload = function (e) {
+          $('.image-upload-wrap').hide();
+
+          $('.file-upload-image').attr('src', e.target.result);
+          $('.file-upload-content').show();
+
+          $('.image-title').html(input.files[0].name);
+        };
+
+        reader.readAsDataURL(input.files[0]);
+
+      } else {
+        removeUpload();
+      }
+    }
+
+    function removeUpload() {
+      $('.file-upload-input').replaceWith($('.file-upload-input').clone());
+      $('.file-upload-content').hide();
+      $('.image-upload-wrap').show();
+    }
+    $('.image-upload-wrap').bind('dragover', function () {
+      $('.image-upload-wrap').addClass('image-dropping');
+    });
+    $('.image-upload-wrap').bind('dragleave', function () {
+      $('.image-upload-wrap').removeClass('image-dropping');
+    });
+  </script>
 </body>
 
 </html>
