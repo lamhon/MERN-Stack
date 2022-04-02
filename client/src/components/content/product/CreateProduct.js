@@ -1,6 +1,7 @@
 import React, { useContext, useState } from 'react';
 import axios from 'axios';
 import Banner from '../Banner';
+import { Link } from 'react-router-dom';
 
 import { GlobalState } from '../../.././GlobalState';
 
@@ -26,6 +27,8 @@ function CreateProduct() {
     // Product update val
     const [update, setUpdate] = useState({});
 
+    const [currentPage, setCurrentPage] = useState('page1');
+    const [page, setPage] = useState(1);
     const handleUpload = async (e) => {
         e.preventDefault();
         try {
@@ -165,41 +168,7 @@ function CreateProduct() {
         }
     }
 
-    const TableData = () => {
-        return (
-            products.map((item, index) => (
-                categories.map(cate => (
-                    (cate._id === item.category) ?
-                        (
-                            <tr>
-                                <td className="t-data">{index + 1}</td>
-                                {
-                                    (update._id === item._id) ?
-                                        (
-                                            <td className="t-data"><b style={{ color: 'red' }}>{item._id}</b></td>
-                                        ) :
-                                        (
-                                            <td className="t-data">{item._id}</td>
-                                        )
-                                }
-                                <td className="t-data">{item.product_id}</td>
-                                <td className="t-data">{item.title}</td>
-                                <td className="t-data">{item.price}</td>
-                                <td className="t-data">{item.sale}%</td>
-                                <td className="t-data"><img style={{ height: '120px', width: '100px' }} src={item.image.url} alt="Product"></img></td>
-                                <td className="t-data">{cate.name}</td>
-                                <td className="t-data"><button onClick={() => { setOption(true); setTypeBtn('Update'); setUpdate(item); setImages(item.image); }} className="btn-nomal">Option</button></td>
-                            </tr>
-                        ) :
 
-                        (
-                            <></>
-                        )
-                ))
-
-            ))
-        )
-    }
 
     const styleUpload = {
         display: images ? "block" : "none"
@@ -234,6 +203,126 @@ function CreateProduct() {
         }
     }
 
+    const TableData = () => {
+        let showArr = getListPaging(products, page);
+        return (
+            <>
+                <table className="table">
+                    <tbody>
+                        <tr>
+                            <th className="t-head">No</th>
+                            <th className="t-head">ID</th>
+                            <th className="t-head">Name</th>
+                            <th className="t-head">Title</th>
+                            <th className="t-head">Price</th>
+                            <th className="t-head">Sale</th>
+                            <th className="t-head">Image</th>
+                            <th className="t-head">Category</th>
+                            <th className="t-head"></th>
+                        </tr>
+                        {
+                            showArr.map((item, index) => (
+                                categories.map(cate => (
+                                    (cate._id === item.category) ?
+                                        (
+                                            <tr>
+                                                <td className="t-data">{(page - 1)*10 + index + 1}</td>
+                                                {
+                                                    (update._id === item._id) ?
+                                                        (
+                                                            <td className="t-data"><Link to={`/product/${item._id}`}><b style={{ color: 'red' }}>{item._id}</b></Link></td>
+                                                        ) :
+                                                        (
+                                                            <td className="t-data"><Link to={`/product/${item._id}`}>{item._id}</Link></td>
+                                                        )
+                                                }
+                                                <td className="t-data">{item.product_id}</td>
+                                                <td className="t-data">{item.title}</td>
+                                                <td className="t-data">{item.price}</td>
+                                                <td className="t-data">{item.sale}%</td>
+                                                <td className="t-data"><img style={{ height: '120px', width: '100px' }} src={item.image.url} alt="Product"></img></td>
+                                                <td className="t-data">{cate.name}</td>
+                                                <td className="t-data"><button onClick={() => { setOption(true); setTypeBtn('Update'); setUpdate(item); setImages(item.image); }} className="btn-nomal">Option</button></td>
+                                            </tr>
+                                        ) :
+
+                                        (
+                                            <></>
+                                        )
+                                ))
+
+                            ))
+                        }
+                    </tbody>
+                </table>
+                {
+                    Paging(products)
+                }
+            </>
+        )
+    }
+
+    // Func render paging
+    const Paging = (data) => {
+        if (data.length === 0 || data.length === 1) {
+            return (
+                <div className="page_number">
+                    <div className="number__paging">1</div>
+                </div>
+            )
+        } else {
+            // get count page
+            let pages = calPaging(data.length);
+            return (
+                <div className="page_number">
+                    <div className="number__paging">«</div>
+                    {
+                        pages.map((page, index) => (
+                            <div
+                                // set current page and set page
+                                onClick={() => { setCurrentPage(page); setPage(index + 1)}}
+                                style={(currentPage === page) ? { backgroundColor: 'rgb(3,148,69)' } : {}}
+                                className="number__paging"
+                                key={page}
+                            >{index + 1}
+                            </div>
+                        ))
+                    }
+                    <div className="number__paging">»</div>
+                </div>
+            )
+        }
+    }
+
+    // Func count page (count row data in table)
+    const calPaging = (length) => {
+        let arr = [];
+
+        // Cal num of page
+        let numberPaging = Math.ceil(length / 10);
+        for (let i = 0; i < numberPaging; i++) {
+            let num = i + 1;
+            let pageNum = "page" + num;
+            arr.push(pageNum);
+        }
+
+        // Return lst arr page. Ex: [page1, page2, page3];
+        return arr;
+    }
+
+    // Func get list data per page
+    const getListPaging = (lst, page) => {
+        const arr = [];
+
+        lst.forEach((item, index) => {
+            // if index of item is in this page => push item to arr and return
+            if ((Math.floor(index / 10) + 1) === page) {
+                arr.push(item);
+            }
+            
+        });
+        return arr;
+    }
     return (
         <>
             <Banner link="/" name="Create Product" />
@@ -293,7 +382,7 @@ function CreateProduct() {
                                                     (
                                                         <div className="mock__input">
                                                             <label>Category:</label>
-                                                            <select name="category" value={product.category} onChange={handleChangeInput}>
+                                                            <select id="category" name="category" value={product.category} onChange={handleChangeInput} required>
                                                                 <option value="">{cateF.name}</option>
                                                                 {
                                                                     categories.map(cate => (
@@ -418,24 +507,9 @@ function CreateProduct() {
                     </form>
                 </div>
                 <div className="mock_row2" >
-                    <table className="table">
-                        <tbody>
-                            <tr>
-                                <th className="t-head">No</th>
-                                <th className="t-head">ID</th>
-                                <th className="t-head">Name</th>
-                                <th className="t-head">Title</th>
-                                <th className="t-head">Price</th>
-                                <th className="t-head">Sale</th>
-                                <th className="t-head">Image</th>
-                                <th className="t-head">Category</th>
-                                <th className="t-head"></th>
-                            </tr>
-                            {
-                                TableData()
-                            }
-                        </tbody>
-                    </table>
+                    {
+                        TableData()
+                    }
                 </div>
             </div>
         </>

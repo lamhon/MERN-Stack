@@ -78,37 +78,7 @@ function Content() {
         }
     }
 
-    // Func render paging
-    const Paging = (data) => {
-        if (data.length === 0 || data.length === 1) {
-            return (
-                <div className="page_number">
-                    <div className="number__paging">1</div>
-                </div>
-            )
-        } else {
-            // get count page
-            let pages = calPaging(data.length);
-            return (
-                <div className="page_number">
-                    <div className="number__paging">«</div>
-                    {
-                        pages.map((page, index) => (
-                            <div
-                                // set current page and set page
-                                onClick={() => { setCurrentPage(page); setPage(index + 1)}}
-                                style={(currentPage === page) ? { backgroundColor: 'rgb(3,148,69)' } : {}}
-                                className="number__paging"
-                                key={page}
-                            >{index + 1}
-                            </div>
-                        ))
-                    }
-                    <div className="number__paging">»</div>
-                </div>
-            )
-        }
-    }
+    
 
     // Func render table
     const TableData = () => {
@@ -287,9 +257,43 @@ function Content() {
         }
     }
 
-    // Func count page
+    // Func render paging
+    const Paging = (data) => {
+        if (data.length === 0 || data.length === 1) {
+            return (
+                <div className="page_number">
+                    <div className="number__paging">1</div>
+                </div>
+            )
+        } else {
+            // get count page
+            let pages = calPaging(data.length);
+            return (
+                <div className="page_number">
+                    <div className="number__paging">«</div>
+                    {
+                        pages.map((page, index) => (
+                            <div
+                                // set current page and set page
+                                onClick={() => { setCurrentPage(page); setPage(index + 1)}}
+                                style={(currentPage === page) ? { backgroundColor: 'rgb(3,148,69)' } : {}}
+                                className="number__paging"
+                                key={page}
+                            >{index + 1}
+                            </div>
+                        ))
+                    }
+                    <div className="number__paging">»</div>
+                </div>
+            )
+        }
+    }
+
+    // Func count page (count row data in table)
     const calPaging = (length) => {
         let arr = [];
+
+        // Cal num of page
         let numberPaging = Math.ceil(length / 10);
         for (let i = 0; i < numberPaging; i++) {
             let num = i + 1;
@@ -297,6 +301,7 @@ function Content() {
             arr.push(pageNum);
         }
 
+        // Return lst arr page. Ex: [page1, page2, page3];
         return arr;
     }
 
@@ -304,13 +309,13 @@ function Content() {
     const getListPaging = (lst, page) => {
         const arr = [];
 
-        const check = (item, index) => {
-            if (((Math.floor(index / 10) + 1) === page)) {
+        lst.forEach((item, index) => {
+            // if index of item is in this page => push item to arr and return
+            if ((Math.floor(index / 10) + 1) === page) {
                 arr.push(item);
             }
-        }
-
-        lst.forEach(check);
+            
+        });
         return arr;
     }
     return (
