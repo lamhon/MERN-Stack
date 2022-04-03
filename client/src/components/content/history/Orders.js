@@ -12,7 +12,7 @@ function Orders() {
     const [option, setOption] = useState('all');
     const [currentPage, setCurrentPage] = useState('page1');
     const [page, setPage] = useState(1);
-    // console.log(option);
+    console.log(orders);
 
     // Effect
     useEffect(() => {
@@ -26,6 +26,7 @@ function Orders() {
         }
         getOrder();
     }, [token]);
+
 
     // ------------Func------------
     // Func count page (count row data in table)
@@ -57,6 +58,43 @@ function Orders() {
         });
         return arr;
     }
+
+    // ------------onClick Func------------
+    const ConfirmBtn = async (id) => {
+        if (window.confirm("Do you want confirm order ID: '" + id + "' ?")) {
+            var time = new Date();
+            let src = '/api/confirm_order/' + id;
+            await axios.put(src, {date_confirm: time.toString() }, {
+                headers: {Authorization: token}
+            });
+
+            alert('Confirm order success');
+            let array = [];
+            orders.forEach(order => {
+                if (order._id === id) {
+                    let obj = {
+                        _id: order._id,
+                        user: order.user,
+                        name: order.name,
+                        phone: order.phone,
+                        address: order.address,
+                        email: order.email,
+                        note: order.note,
+                        info: order.info,
+                        date_order: order.date_order,
+                        date_confirm: time.toString()
+                    }
+
+                    array.push(obj);
+                } else {
+                    array.push(order);
+                }
+            });
+            setOrders(array);
+        }
+        // console.log(token);
+    }
+
 
     // ------------Func render------------
     // Render tab head
@@ -121,6 +159,27 @@ function Orders() {
                                     <td key={order._id + "," + order.email} className="t-data">{order.email}</td>
                                     <td key={order._id + "," + order.address} className="t-data">{order.address}</td>
                                     <td key={order._id + "," + order.date_order} className="t-data">{order.date_order}</td>
+                                    {
+                                        (option === 'all') ?
+                                            (
+                                                <></>
+                                            ) :
+                                            (
+                                                (option === 'pending') ?
+                                                    (
+                                                        <td key={order._id + ".pending"} className="t-data"><button onClick={() => ConfirmBtn(order._id)} className="btn-nomal">Confirm</button></td>
+                                                    ) :
+                                                    (
+                                                        (option === 'delivering') ?
+                                                            (
+                                                                <td key={order._id + ".delivering"} className="t-data"><button className="btn-nomal">Delivered</button></td>
+                                                            ) :
+                                                            (
+                                                                <></>
+                                                            )
+                                                    )
+                                            )
+                                    }
                                 </tr>
                             ))
                         }

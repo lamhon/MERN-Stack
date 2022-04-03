@@ -7,7 +7,7 @@ router.get('/order', auth, authAdmin, orderController.getOrders);
 
 router.post('/checkout', auth, orderController.checkOut);
 
-router.post('/confirm_order', auth, authAdmin, orderController.confirm_Order);
+router.put('/confirm_order/:id', auth, authAdmin, orderController.confirm_Order);
 
 router.post('/delivered_order', auth, authAdmin, orderController.delivered_Order);
 

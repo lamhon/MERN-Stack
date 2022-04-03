@@ -39,17 +39,18 @@ const OrderController = {
     },
     confirm_Order: async (req, res) => {
         try {
-            const { id, date_confirm } = req.body;
+            const { date_confirm } = req.body;
 
-            const checkId = await Orders.findOne({ id });
+            const checkId = await Orders.findOne({ id: req.params.id });
 
             if (!checkId) {
                 return res.status(500).json({ msg: "Order not found" });
             }
 
-            await Orders.findOneAndUpdate({ id }, { date_confirm });
+            await Orders.findByIdAndUpdate({ _id: req.params.id }, { date_confirm });
 
             res.json({ msg: "Confirm order successful" });
+            // console.log(req)
         } catch (err) {
             return res.status(500).json({ msg: err.message });
         }
