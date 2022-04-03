@@ -19,10 +19,10 @@ router.post('/upload',auth, authAdmin, (req, res) => {
         }
 
         const file = req.files.file;
-        if (file.size > 1024 * 1024) { // If file size > 1 MB
-            removeTmp(file.tempFilePath);
-            return res.status(400).json({ msg: 'Size too large' });
-        }
+        // if (file.size > 1024 * 1024) { // If file size > 1 MB
+        //     removeTmp(file.tempFilePath);
+        //     return res.status(400).json({ msg: 'Size too large' });
+        // }
 
         if (file.mimetype !== 'image/jpeg' && file.mimetype !== 'image/png') {
             removeTmp(file.tempFilePath);

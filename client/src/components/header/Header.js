@@ -14,7 +14,7 @@ function Header() {
         localStorage.clear();
         // setIsAdmin(false);
         // setIsLogged(false);
-        window.location.href="/";
+        window.location.href = "/";
     }
 
     const adminRouter = () => {
@@ -29,7 +29,16 @@ function Header() {
     const loggedRouter = () => {
         return (
             <>
-                <li><Link to="/history">History</Link></li>
+                {
+                    (isAdmin) ?
+                        (
+                            <li><Link to="/orders">Orders</Link></li>
+                        ) :
+                        (
+                            <li><Link to="/history">History</Link></li>
+                        )
+                }
+
                 <li><Link to="/" onClick={logoutUser}>Logout</Link></li>
             </>
         )
@@ -208,10 +217,10 @@ function Header() {
                     </nav>
                     <div>
                         {
-                            isAdmin ? '' : 
-                            <>
-                                <Link to="/cart"><span className="fa fa-shopping-cart my-cart-icon">{cart.length}</span></Link>
-                            </>
+                            isAdmin ? '' :
+                                <>
+                                    <Link to="/cart"><span className="fa fa-shopping-cart my-cart-icon">{cart.length}</span></Link>
+                                </>
                         }
                     </div>
                     <div className="clearfix" />

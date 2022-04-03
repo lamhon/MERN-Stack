@@ -42,9 +42,9 @@ function CreateProduct() {
                 return alert('File not exist');
             }
 
-            if (file.size > 1024 * 1024) {
-                return alert('File too large');
-            }
+            // if (file.size > 1024 * 1024) {
+            //     return alert('File too large');
+            // }
 
             if (file.type !== 'image/jpeg' && file.type !== 'image/png') {
                 return alert('File format is incorrect');
@@ -382,7 +382,7 @@ function CreateProduct() {
                                                     (
                                                         <div className="mock__input">
                                                             <label>Category:</label>
-                                                            <select id="category" name="category" value={product.category} onChange={handleChangeInput} required>
+                                                            <select id="category" name="category" value={product.category} onChange={handleChangeInput}>
                                                                 <option value="">{cateF.name}</option>
                                                                 {
                                                                     categories.map(cate => (

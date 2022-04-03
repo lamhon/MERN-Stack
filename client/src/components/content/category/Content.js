@@ -20,12 +20,15 @@ function Content() {
     // get value to update
     const [valueUpdate, setValueUpdate] = useState('');
 
+    const [currentPage, setCurrentPage] = useState('page1');
+    const [page, setPage] = useState(1);
     // Data table (search value)
     const DataTable = (searchVal) => {
         let arr = [];
         // Check search is undefined
         if (typeof search === 'undefined') {
-            arr = categories;
+            // arr = categories;
+            arr = getListPaging(categories , page);
         } else {
             // Filter value on table
             searchVal = searchVal.toLowerCase();
@@ -36,7 +39,9 @@ function Content() {
                 if (name.search(searchVal) >= 0) {
                     arr.push(item);
                 }
-            })
+            });
+
+            arr = getListPaging(arr, page);
 
         }
         return (
@@ -134,6 +139,68 @@ function Content() {
             alert(err.response.data.msg);
         }
     }
+
+    // Func render paging
+    const Paging = (data) => {
+        if (data.length === 0 || data.length === 1) {
+            return (
+                <div className="page_number">
+                    <div className="number__paging">1</div>
+                </div>
+            )
+        } else {
+            // get count page
+            let pages = calPaging(data.length);
+            return (
+                <div className="page_number">
+                    <div className="number__paging">«</div>
+                    {
+                        pages.map((page, index) => (
+                            <div
+                                // set current page and set page
+                                onClick={() => { setCurrentPage(page); setPage(index + 1)}}
+                                style={(currentPage === page) ? { backgroundColor: 'rgb(3,148,69)' } : {}}
+                                className="number__paging"
+                                key={page}
+                            >{index + 1}
+                            </div>
+                        ))
+                    }
+                    <div className="number__paging">»</div>
+                </div>
+            )
+        }
+    }
+
+    // Func count page (count row data in table)
+    const calPaging = (length) => {
+        let arr = [];
+
+        // Cal num of page
+        let numberPaging = Math.ceil(length / 10);
+        for (let i = 0; i < numberPaging; i++) {
+            let num = i + 1;
+            let pageNum = "page" + num;
+            arr.push(pageNum);
+        }
+
+        // Return lst arr page. Ex: [page1, page2, page3];
+        return arr;
+    }
+
+    // Func get list data per page
+    const getListPaging = (lst, page) => {
+        const arr = [];
+
+        lst.forEach((item, index) => {
+            // if index of item is in this page => push item to arr and return
+            if ((Math.floor(index / 10) + 1) === page) {
+                arr.push(item);
+            }
+            
+        });
+        return arr;
+    }
     return (
         <>
             <Banner link="/" name="Category" />
@@ -188,6 +255,9 @@ function Content() {
                                     (
                                         <></>
                                     )
+                            }
+                            {
+                                Paging(categories)
                             }
                         </div>
                     </div>

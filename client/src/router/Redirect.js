@@ -10,6 +10,7 @@ import Checkout from '../components/content/checkout/Checkout';
 import History from '../components/content/history/History';
 import Category from '../components/content/category/Category';
 import CreateProduct from '../components/content/product/CreateProduct';
+import Orders from '../components/content/history/Orders';
 
 export default function Redirect() {
     return (
@@ -26,6 +27,7 @@ export default function Redirect() {
                 <Route path="/history" element={<History />} />
                 <Route path="/category" element={<Category />} />
                 <Route path="/create_product" element={<CreateProduct />} />
+                <Route path="/orders" element={<Orders />} />
             </Routes>
         </div>
     );

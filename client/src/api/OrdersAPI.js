@@ -6,12 +6,14 @@ function OrdersAPI(token) {
     const [myOrders, setMyOrders] = useState([]);
 
     // const getOrders = async () => {
-    //     const res = await axios.get('/api/order');
+    //     const res = await axios.get('/api/order', {
+    //         headers: { Authorization: token }
+    //     });
     //     setOrders(res.data.order);
     //     // console.log(res);
     // }
 
-    
+
 
     const checkout = async (order) => {
         const res = await axios.get('/api/checkout', order, {

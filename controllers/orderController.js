@@ -4,8 +4,10 @@ const Users = require('../models/UserModel');
 const OrderController = {
     getOrders: async (req, res) => {
         try {
-            const order = await Orders.find();
-            res.json(order);
+            // console.log('Vo dc day r')
+
+            const orders = await Orders.find();
+            res.json(orders);
         } catch (err) {
             return res.status(500).json({ msg: err.message });
         }
@@ -72,7 +74,7 @@ const OrderController = {
     getOrdersByUser: async (req, res) => {
         try {
             const { userId } = req.body;
-            console.log(userId)
+            // console.log(userId)
             const orders = await Orders.find({ user: userId });
 
             // console.log(userId);
