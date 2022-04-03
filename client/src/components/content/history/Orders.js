@@ -60,12 +60,13 @@ function Orders() {
     }
 
     // ------------onClick Func------------
+    // Confirm btn
     const ConfirmBtn = async (id) => {
         if (window.confirm("Do you want confirm order ID: '" + id + "' ?")) {
             var time = new Date();
             let src = '/api/confirm_order/' + id;
-            await axios.put(src, {date_confirm: time.toString() }, {
-                headers: {Authorization: token}
+            await axios.put(src, { date_confirm: time.toString() }, {
+                headers: { Authorization: token }
             });
 
             alert('Confirm order success');
@@ -95,6 +96,41 @@ function Orders() {
         // console.log(token);
     }
 
+    // Delivered btn
+    const DeliveredBtn = async (id) => {
+        if (window.confirm("Order ID: '" + id + "' is delivered ?")) {
+            var time = new Date();
+            let src = '/api/delivered_order/' + id;
+            await axios.put(src, { date_delivered: time.toString() }, {
+                headers: { Authorization: token }
+            });
+
+            alert('Order is delivered');
+            let array = [];
+            orders.forEach(order => {
+                if (order._id === id) {
+                    let obj = {
+                        _id: order._id,
+                        user: order.user,
+                        name: order.name,
+                        phone: order.phone,
+                        address: order.address,
+                        email: order.email,
+                        note: order.note,
+                        info: order.info,
+                        date_order: order.date_order,
+                        date_confirm: order.date_confirm,
+                        date_delivered: time.toString()
+                    }
+
+                    array.push(obj);
+                } else {
+                    array.push(order);
+                }
+            });
+            setOrders(array);
+        }
+    }
 
     // ------------Func render------------
     // Render tab head
@@ -162,7 +198,17 @@ function Orders() {
                                     {
                                         (option === 'all') ?
                                             (
-                                                <></>
+                                                <td key={order._id + ",all"} className="t-data">
+                                                    {
+                                                        (typeof order.date_confirm === 'undefined') ? 
+                                                        (
+                                                            'Pending'
+                                                        ) : 
+                                                        (
+                                                            (typeof order.date_confirm !== 'undefined' && typeof order.date_delivered === 'undefined') ? 'Delivering' : 'Delivered'
+                                                        )
+                                                    }
+                                                </td>
                                             ) :
                                             (
                                                 (option === 'pending') ?
@@ -172,7 +218,7 @@ function Orders() {
                                                     (
                                                         (option === 'delivering') ?
                                                             (
-                                                                <td key={order._id + ".delivering"} className="t-data"><button className="btn-nomal">Delivered</button></td>
+                                                                <td key={order._id + ".delivering"} className="t-data"><button onClick={() => DeliveredBtn(order._id)} className="btn-nomal">Delivered</button></td>
                                                             ) :
                                                             (
                                                                 <></>
