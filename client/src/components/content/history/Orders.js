@@ -8,15 +8,19 @@ function Orders() {
     const [token] = state.token;
     const [orders, setOrders] = useState([]);
     const tabs = ['all', 'pending', 'delivering', 'delivered'];
-    // console.log(token);
+
+    const [option, setOption] = useState('all');
+    // console.log(option);
 
     // Effect
     useEffect(() => {
         const getOrder = async () => {
-            const res = await axios.get('/api/order', {
-                headers: { Authorization: token }
-            });
-            setOrders(res.data);
+            if (token) {
+                const res = await axios.get('/api/order', {
+                    headers: { Authorization: token }
+                });
+                setOrders(res.data);
+            }
         }
         getOrder();
     }, [token]);
@@ -27,8 +31,91 @@ function Orders() {
     const TabData = () => {
         return (
             tabs.map(tab => (
-                <li><a href="#!" key={tab}>{tab.toUpperCase()}</a></li>
+                <li><a onClick={() => setOption(tab)} href="#!" key={tab}>{tab.toUpperCase()}</a></li>
             ))
+        )
+    }
+
+    const TableData = () => {
+        return (
+            (option === 'all') ?
+                (
+                    orders.map((order, index) => (
+                        <tr key={order._id}>
+                            <td key={order._id + "," + index} className="t-data">{index + 1}</td>
+                            <td key={order._id + "," + order._id} className="t-data">{order._id}</td>
+                            <td key={order._id + "," + order.name} className="t-data">{order.name}</td>
+                            <td key={order._id + "," + order.phone} className="t-data">{order.phone}</td>
+                            <td key={order._id + "," + order.email} className="t-data">{order.email}</td>
+                            <td key={order._id + "," + order.address} className="t-data">{order.address}</td>
+                            <td key={order._id + "," + order.date_order} className="t-data">{order.date_order}</td>
+                        </tr>
+                    ))
+                ) :
+                (
+                    (option === 'pending') ?
+                        (
+                            orders.map((order, index) => (
+                                (typeof order.date_confirm === 'undefined' && typeof order.date_delivered === 'undefined') ?
+                                    (
+                                        <tr key={order._id}>
+                                            <td key={order._id + "," + index} className="t-data">{index + 1}</td>
+                                            <td key={order._id + "," + order._id} className="t-data">{order._id}</td>
+                                            <td key={order._id + "," + order.name} className="t-data">{order.name}</td>
+                                            <td key={order._id + "," + order.phone} className="t-data">{order.phone}</td>
+                                            <td key={order._id + "," + order.email} className="t-data">{order.email}</td>
+                                            <td key={order._id + "," + order.address} className="t-data">{order.address}</td>
+                                            <td key={order._id + "," + order.date_order} className="t-data">{order.date_order}</td>
+                                        </tr>
+                                    ) :
+                                    (
+                                        <></>
+                                    )
+                            ))
+                        ) :
+                        (
+                            (option === 'delivering') ?
+                                (
+                                    orders.map((order, index) => (
+                                        (typeof order.date_confirm !== 'undefined' && typeof order.date_delivered === 'undefined') ?
+                                            (
+                                                <tr key={order._id}>
+                                                    <td key={order._id + "," + index} className="t-data">{index + 1}</td>
+                                                    <td key={order._id + "," + order._id} className="t-data">{order._id}</td>
+                                                    <td key={order._id + "," + order.name} className="t-data">{order.name}</td>
+                                                    <td key={order._id + "," + order.phone} className="t-data">{order.phone}</td>
+                                                    <td key={order._id + "," + order.email} className="t-data">{order.email}</td>
+                                                    <td key={order._id + "," + order.address} className="t-data">{order.address}</td>
+                                                    <td key={order._id + "," + order.date_order} className="t-data">{order.date_order}</td>
+                                                </tr>
+                                            ) :
+                                            (
+                                                <></>
+                                            )
+                                    ))
+                                ) :
+                                (
+                                    orders.map((order, index) => (
+                                        (typeof order.date_delivered !== 'undefined') ?
+                                            (
+                                                <tr key={order._id}>
+                                                    <td key={order._id + "," + index} className="t-data">{index + 1}</td>
+                                                    <td key={order._id + "," + order._id} className="t-data">{order._id}</td>
+                                                    <td key={order._id + "," + order.name} className="t-data">{order.name}</td>
+                                                    <td key={order._id + "," + order.phone} className="t-data">{order.phone}</td>
+                                                    <td key={order._id + "," + order.email} className="t-data">{order.email}</td>
+                                                    <td key={order._id + "," + order.address} className="t-data">{order.address}</td>
+                                                    <td key={order._id + "," + order.date_order} className="t-data">{order.date_order}</td>
+                                                </tr>
+                                            ) :
+                                            (
+                                                <></>
+                                            )
+                                    ))
+                                )
+                        )
+                )
+
         )
     }
     return (
@@ -51,7 +138,7 @@ function Orders() {
                                     <div className="header__content"><h3 style={{ textAlign: 'center' }}>Orders</h3></div>
                                     <table className="table">
                                         <tbody>
-                                            <tr>
+                                            <tr key='table'>
                                                 <th className="t-head">No</th>
                                                 <th className="t-head">ID</th>
                                                 <th className="t-head">To</th>
@@ -60,33 +147,9 @@ function Orders() {
                                                 <th className="t-head">Address</th>
                                                 <th className="t-head">Date order</th>
                                             </tr>
-                                            <tr>
-                                                <td className="t-data">1</td>
-                                                <td className="t-data">2</td>
-                                                <td className="t-data">3</td>
-                                                <td className="t-data">4</td>
-                                                <td className="t-data">6</td>
-                                                <td className="t-data">6</td>
-                                                <td className="t-data">6</td>
-                                            </tr>
-                                            <tr>
-                                                <td className="t-data">1</td>
-                                                <td className="t-data">2</td>
-                                                <td className="t-data">3</td>
-                                                <td className="t-data">4</td>
-                                                <td className="t-data">6</td>
-                                                <td className="t-data">6</td>
-                                                <td className="t-data">6</td>
-                                            </tr>
-                                            <tr>
-                                                <td className="t-data">1</td>
-                                                <td className="t-data">2</td>
-                                                <td className="t-data">3</td>
-                                                <td className="t-data">4</td>
-                                                <td className="t-data">6</td>
-                                                <td className="t-data">6</td>
-                                                <td className="t-data">656</td>
-                                            </tr>
+                                            {
+                                                TableData()
+                                            }
                                         </tbody></table>
                                     <div className="page_number">
                                         <div className="number__paging">«</div>
